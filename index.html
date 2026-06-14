@@ -795,6 +795,7 @@
   </a>
   <ul>
     <li><a href="#tasas">Tasas</a></li>
+    <li><a href="#calculadora">Calculadora</a></li>
     <li><a href="#servicios">Servicios</a></li>
     <li><a href="#ubicacion">Ubicación</a></li>
     <li><a href="#contacto" class="nav-cta">Contáctanos</a></li>
@@ -904,7 +905,31 @@
     </div>
   </div>
 </section>
+<!-- CALCULADORA -->
+<section class="divisas" id="calculadora">
+  <div class="divisas-header">
+    <p class="section-eyebrow">Calculadora</p>
+    <h2 class="section-title">Calcula tu cambio</h2>
+    <p class="section-sub">Ingresa el monto y calcula cuánto recibirás según el tipo de cambio.</p>
+  </div>
 
+  <div class="divisas-table" style="padding: 30px; max-width: 600px;">
+    <label>Monto</label>
+    <input id="montoCambio" type="number" placeholder="Ejemplo: 100" style="width:100%; padding:14px; margin:10px 0 18px; border:1px solid #E5E7EB; border-radius:8px;">
+
+    <label>Operación</label>
+    <select id="operacionCambio" style="width:100%; padding:14px; margin:10px 0 18px; border:1px solid #E5E7EB; border-radius:8px;">
+      <option value="compra">Tengo dólares y quiero soles</option>
+      <option value="venta">Tengo soles y quiero dólares</option>
+    </select>
+
+    <button onclick="calcularCambio()" class="btn-primary" style="width:100%; justify-content:center;">
+      Calcular
+    </button>
+
+    <h3 id="resultadoCambio" style="margin-top:24px; font-size:1.4rem;"></h3>
+  </div>
+</section>
 <!-- TABLA DE TASAS -->
 <section class="divisas" id="tasas">
   <div class="divisas-header">
@@ -1153,6 +1178,30 @@
     document.getElementById('usd-rate').textContent = newRate;
   }
   setInterval(jitterRates, 8000);
+  function calcularCambio() {
+  const monto = parseFloat(document.getElementById('montoCambio').value);
+  const operacion = document.getElementById('operacionCambio').value;
+
+  const compra = 3.712;
+  const venta = 3.728;
+
+  if (isNaN(monto) || monto <= 0) {
+    document.getElementById('resultadoCambio').textContent = 'Ingresa un monto válido.';
+    return;
+  }
+
+  let resultado = 0;
+
+  if (operacion === 'compra') {
+    resultado = monto * compra;
+    document.getElementById('resultadoCambio').textContent =
+      `Recibirás aproximadamente S/ ${resultado.toFixed(2)}`;
+  } else {
+    resultado = monto / venta;
+    document.getElementById('resultadoCambio').textContent =
+      `Recibirás aproximadamente $ ${resultado.toFixed(2)}`;
+  }
+}
 </script>
 </body>
 </html>
