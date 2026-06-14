@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurum Divisas — Casa de Cambio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0B1F3A;
+      --navy-mid: #122848;
+      --gold: #C9A84C;
+      --gold-light: #E2C77A;
+      --gold-dark: #A88630;
+      --cream: #F8F6F1;
+      --white: #FFFFFF;
+      --gray: #6B7280;
+      --gray-light: #E5E7EB;
+      --green: #22C55E;
+      --red: #EF4444;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(11, 31, 58, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.25);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--gold);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--navy);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+
+    .logo-text span { color: var(--gold); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav ul a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--navy) !important;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201, 168, 76, 0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Ticker */
+    .ticker-wrap {
+      margin-bottom: 56px;
+      overflow: hidden;
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .ticker-header {
+      background: rgba(201, 168, 76, 0.12);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ticker-dot {
+      width: 8px; height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .ticker-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .ticker-time {
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .ticker-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .ticker-item {
+      padding: 16px 20px;
+      border-right: 1px solid rgba(201, 168, 76, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ticker-item:last-child { border-right: none; }
+
+    .ticker-currency {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+    }
+
+    .ticker-rate {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: -0.01em;
+    }
+
+    .ticker-change { font-size: 0.7rem; font-weight: 600; }
+    .up { color: var(--green); }
+    .down { color: var(--red); }
+
+    /* Hero content — full width, centered */
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.6);
+      max-width: 520px;
+      margin-bottom: 40px;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 7px 16px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .badge-icon { color: var(--gold); font-size: 1rem; }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--gold);
+      padding: 28px 5%;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .stat { text-align: center; }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(11,31,58,0.65);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 90px 5%; }
+
+    .section-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--gray);
+      max-width: 540px;
+    }
+
+    /* ── SERVICIOS ── */
+    .services { background: var(--white); }
+    .services-header { margin-bottom: 52px; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .service-card {
+      border: 1px solid var(--gray-light);
+      border-radius: 14px;
+      padding: 32px 28px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      border-color: var(--gold-light);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(11,31,58,0.08);
+    }
+
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .service-desc {
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: var(--gray);
+    }
+
+    /* ── DIVISAS ── */
+    .divisas { background: var(--cream); }
+    .divisas-header { margin-bottom: 48px; }
+
+    .divisas-table {
+      background: var(--white);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--gray-light);
+      box-shadow: 0 4px 24px rgba(11,31,58,0.05);
+    }
+
+    .divisas-table table { width: 100%; border-collapse: collapse; }
+
+    .divisas-table th {
+      background: var(--navy);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 14px 24px;
+      text-align: left;
+    }
+
+    .divisas-table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--gray-light);
+      font-size: 0.9rem;
+      color: var(--navy);
+    }
+
+    .divisas-table tr:last-child td { border-bottom: none; }
+    .divisas-table tr:hover td { background: var(--cream); }
+
+    .currency-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .flag-circle {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      background: var(--cream);
+      border: 1px solid var(--gray-light);
+    }
+
+    .c-name { font-weight: 600; }
+    .c-code { font-size: 0.75rem; color: var(--gray); }
+
+    .rate-cell {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+    }
+
+    .change-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .change-pill.up { background: rgba(34, 197, 94, 0.1); color: #16a34a; }
+    .change-pill.down { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+
+    /* ── CONFIANZA ── */
+    .trust { background: var(--navy); }
+    .trust .section-eyebrow { color: var(--gold); }
+    .trust .section-title { color: var(--white); }
+    .trust .section-sub { color: rgba(255,255,255,0.55); }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 52px;
+    }
+
+    .trust-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 28px;
+      display: flex;
+      gap: 18px;
+      transition: background 0.2s;
+    }
+
+    .trust-card:hover { background: rgba(255,255,255,0.07); }
+
+    .trust-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gold);
+      opacity: 0.5;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .trust-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .trust-desc {
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── UBICACIÓN ── */
+    .ubicacion { background: var(--cream); }
+    .ubicacion-header { margin-bottom: 48px; }
+
+    .ubicacion-card {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--gray-light);
+      box-shadow: 0 4px 24px rgba(11,31,58,0.06);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 960px;
+    }
+
+    .ubicacion-map {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ubicacion-map::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.12) 0%, transparent 70%);
+    }
+
+    .map-pin {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .map-pin-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    }
+
+    .map-pin-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .map-pin-sub {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.35);
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .map-link:hover { background: rgba(201,168,76,0.28); }
+
+    .ubicacion-info {
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .ubicacion-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      color: var(--gold);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+
+    .ubicacion-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .ubicacion-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.875rem;
+      color: var(--gray);
+      line-height: 1.55;
+    }
+
+    .detail-icon {
+      width: 32px; height: 32px;
+      background: var(--cream);
+      border: 1px solid var(--gray-light);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .detail-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 2px;
+    }
+
+    /* ── CTA STRIP ── */
+    .cta-strip {
+      background: linear-gradient(135deg, var(--navy) 0%, #1a3a6a 100%);
+      padding: 80px 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-strip::before {
+      content: '₿ $ € £ ¥ ₿ $ € £ ¥ ₿ $ € £ ¥';
+      position: absolute;
+      font-size: 6rem;
+      opacity: 0.03;
+      white-space: nowrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      letter-spacing: 1rem;
+      pointer-events: none;
+    }
+
+    .cta-strip .section-title { color: var(--white); margin-bottom: 12px; }
+    .cta-strip .section-sub { color: rgba(255,255,255,0.55); margin: 0 auto 36px; text-align: center; }
+
+    .cta-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover { background: var(--gold-light); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #060F1D;
+      padding: 60px 5% 32px;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .logo { margin-bottom: 16px; display: inline-flex; }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .footer-col h4 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+    .footer-col a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: var(--white); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-reg { display: flex; gap: 16px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .ticker-grid { grid-template-columns: repeat(3, 1fr); }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .trust-grid { grid-template-columns: 1fr; }
+      .ubicacion-card { grid-template-columns: 1fr; }
+      .ubicacion-map { min-height: 200px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      nav ul { display: none; }
+      .ticker-grid { grid-template-columns: repeat(2, 1fr); }
+      .ticker-item:nth-child(5) { display: none; }
+      .services-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">A</div>
+    <span class="logo-text">Aurum <span>Divisas</span></span>
+  </a>
+  <ul>
+    <li><a href="#tasas">Tasas</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#ubicacion">Ubicación</a></li>
+    <li><a href="#contacto" class="nav-cta">Contáctanos</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Ticker de divisas -->
+  <div class="ticker-wrap">
+    <div class="ticker-header">
+      <div class="ticker-dot"></div>
+      <span class="ticker-label">Tasas en tiempo real</span>
+      <span class="ticker-time" id="clock">--:--:--</span>
+    </div>
+    <div class="ticker-grid">
+      <div class="ticker-item">
+        <span class="ticker-currency">USD / PEN</span>
+        <span class="ticker-rate" id="usd-rate">3.728</span>
+        <span class="ticker-change up">▲ +0.12%</span>
+      </div>
+      <div class="ticker-item">
+        <span class="ticker-currency">EUR / PEN</span>
+        <span class="ticker-rate">4.051</span>
+        <span class="ticker-change up">▲ +0.07%</span>
+      </div>
+      <div class="ticker-item">
+        <span class="ticker-currency">GBP / PEN</span>
+        <span class="ticker-rate">4.712</span>
+        <span class="ticker-change down">▼ −0.04%</span>
+      </div>
+      <div class="ticker-item">
+        <span class="ticker-currency">CAD / PEN</span>
+        <span class="ticker-rate">2.738</span>
+        <span class="ticker-change up">▲ +0.09%</span>
+      </div>
+      <div class="ticker-item">
+        <span class="ticker-currency">JPY / PEN</span>
+        <span class="ticker-rate">0.0247</span>
+        <span class="ticker-change down">▼ −0.11%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero content -->
+  <div class="hero-content">
+    <p class="hero-eyebrow">Casa de Cambio · Santiago de Surco, Lima</p>
+    <h1 class="hero-title">
+      Cambia tu dinero<br />
+      al <em>mejor tipo</em><br />
+      de cambio.
+    </h1>
+    <p class="hero-sub">
+      En Aurum Divisas encontrarás tasas competitivas, atención inmediata y la seguridad de operar con una casa de cambio de confianza en el corazón de Chacarilla del Estanque.
+    </p>
+    <div class="hero-badges">
+      <div class="badge"><span class="badge-icon">✓</span> Sin comisiones ocultas</div>
+      <div class="badge"><span class="badge-icon">✓</span> Atención personalizada</div>
+      <div class="badge"><span class="badge-icon">✓</span> Tasas competitivas</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat">
+    <div class="stat-number">+200K</div>
+    <div class="stat-label">Clientes atendidos</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">28</div>
+    <div class="stat-label">Divisas disponibles</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">100%</div>
+    <div class="stat-label">Transparencia</div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section class="services" id="servicios">
+  <div class="services-header">
+    <p class="section-eyebrow">Qué ofrecemos</p>
+    <h2 class="section-title">Servicios diseñados<br />para cada necesidad</h2>
+    <p class="section-sub">Desde personas naturales hasta empresas importadoras, tenemos la solución cambiaria que buscas.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">💱</div>
+      <div class="service-name">Cambio de divisas</div>
+      <p class="service-desc">Compra y venta de más de 28 monedas extranjeras al mejor tipo de cambio del mercado. USD, EUR, GBP, CAD, CHF, JPY y más.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏢</div>
+      <div class="service-name">Cambio empresarial</div>
+      <p class="service-desc">Tasas preferenciales para empresas con operaciones frecuentes. Atención personalizada y contratos de tipo de cambio a futuro.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📲</div>
+      <div class="service-name">Cambio digital</div>
+      <p class="service-desc">Realiza tu operación por WhatsApp o app y recibe el dinero directamente en tu cuenta bancaria sin salir de casa.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <div class="service-name">Asesoría cambiaria</div>
+      <p class="service-desc">Nuestros especialistas te orientan sobre el mejor momento para cambiar y cómo protegerte de la volatilidad del mercado.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TABLA DE TASAS -->
+<section class="divisas" id="tasas">
+  <div class="divisas-header">
+    <p class="section-eyebrow">Cotizaciones del día</p>
+    <h2 class="section-title">Tipos de cambio<br />actualizados</h2>
+    <p class="section-sub">Precios de compra y venta frente al Sol peruano (PEN). Actualizado: <strong id="update-time">hoy</strong></p>
+  </div>
+  <div class="divisas-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Moneda</th>
+          <th>Compra (PEN)</th>
+          <th>Venta (PEN)</th>
+          <th>Variación</th>
+          <th>Tendencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="currency-name"><div class="flag-circle">🇺🇸</div><div><div class="c-name">Dólar estadounidense</div><div class="c-code">USD</div></div></div></td>
+          <td class="rate-cell">3.712</td>
+          <td class="rate-cell">3.728</td>
+          <td><span class="change-pill up">▲ +0.12%</span></td>
+          <td>📈</td>
+        </tr>
+        <tr>
+          <td><div class="currency-name"><div class="flag-circle">🇪🇺</div><div><div class="c-name">Euro</div><div class="c-code">EUR</div></div></div></td>
+          <td class="rate-cell">4.032</td>
+          <td class="rate-cell">4.051</td>
+          <td><span class="change-pill up">▲ +0.07%</span></td>
+          <td>📈</td>
+        </tr>
+        <tr>
+          <td><div class="currency-name"><div class="flag-circle">🇬🇧</div><div><div class="c-name">Libra esterlina</div><div class="c-code">GBP</div></div></div></td>
+          <td class="rate-cell">4.695</td>
+          <td class="rate-cell">4.712</td>
+          <td><span class="change-pill down">▼ −0.04%</span></td>
+          <td>📉</td>
+        </tr>
+        <tr>
+          <td><div class="currency-name"><div class="flag-circle">🇨🇦</div><div><div class="c-name">Dólar canadiense</div><div class="c-code">CAD</div></div></div></td>
+          <td class="rate-cell">2.721</td>
+          <td class="rate-cell">2.738</td>
+          <td><span class="change-pill up">▲ +0.09%</span></td>
+          <td>📈</td>
+        </tr>
+        <tr>
+          <td><div class="currency-name"><div class="flag-circle">🇨🇭</div><div><div class="c-name">Franco suizo</div><div class="c-code">CHF</div></div></div></td>
+          <td class="rate-cell">4.088</td>
+          <td class="rate-cell">4.108</td>
+          <td><span class="change-pill up">▲ +0.03%</span></td>
+          <td>📈</td>
+        </tr>
+        <tr>
+          <td><div class="currency-name"><div class="flag-circle">🇯🇵</div><div><div class="c-name">Yen japonés</div><div class="c-code">JPY (x100)</div></div></div></td>
+          <td class="rate-cell">2.460</td>
+          <td class="rate-cell">2.470</td>
+          <td><span class="change-pill down">▼ −0.11%</span></td>
+          <td>📉</td>
+        </tr>
+        <tr>
+          <td><div class="currency-name"><div class="flag-circle">🇨🇱</div><div><div class="c-name">Peso chileno</div><div class="c-code">CLP (x1000)</div></div></div></td>
+          <td class="rate-cell">3.895</td>
+          <td class="rate-cell">3.921</td>
+          <td><span class="change-pill up">▲ +0.05%</span></td>
+          <td>📈</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- POR QUÉ ELEGIRNOS -->
+<section class="trust">
+  <p class="section-eyebrow">Por qué elegirnos</p>
+  <h2 class="section-title">Seguridad y transparencia<br />en cada operación</h2>
+  <p class="section-sub">Operamos con los más altos estándares de integridad para que cada transacción sea segura y confiable.</p>
+  <div class="trust-grid">
+    <div class="trust-card">
+      <div class="trust-num">01</div>
+      <div>
+        <div class="trust-title">Tasas competitivas garantizadas</div>
+        <p class="trust-desc">Monitoreamos el mercado en tiempo real para ofrecerte siempre un tipo de cambio por encima de los bancos. Consulta y compara.</p>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-num">02</div>
+      <div>
+        <div class="trust-title">Sin costos sorpresa</div>
+        <p class="trust-desc">El precio que ves es el precio que pagas. Sin comisiones, sin spread oculto, sin cargos por monto o por tipo de billete.</p>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-num">03</div>
+      <div>
+        <div class="trust-title">Atención personalizada</div>
+        <p class="trust-desc">Nuestro equipo está capacitado para resolver cada consulta y guiarte en operaciones complejas. Horario extendido de lunes a sábado.</p>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-num">04</div>
+      <div>
+        <div class="trust-title">Operaciones seguras</div>
+        <p class="trust-desc">Cada transacción queda debidamente registrada. Trabajamos con los más altos estándares de seguridad y cumplimiento normativo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UBICACIÓN -->
+<section class="ubicacion" id="ubicacion">
+  <div class="ubicacion-header">
+    <p class="section-eyebrow">Encuéntranos</p>
+    <h2 class="section-title">Nuestra ubicación</h2>
+    <p class="section-sub">Visítanos en Chacarilla del Estanque, uno de los distritos más accesibles de Lima.</p>
+  </div>
+  <div class="ubicacion-card">
+    <div class="ubicacion-map">
+      <div class="map-pin">
+        <span class="map-pin-icon">📍</span>
+        <div class="map-pin-label">Aurum Divisas</div>
+        <div class="map-pin-sub">Chacarilla del Estanque · Surco</div>
+        <a class="map-link" href="https://maps.google.com/?q=Av.+Primavera+480+Chacarilla+del+Estanque+Santiago+de+Surco+Lima" target="_blank" rel="noopener">
+          Ver en Google Maps →
+        </a>
+      </div>
+    </div>
+    <div class="ubicacion-info">
+      <div class="ubicacion-badge">⭐ Sede principal</div>
+      <div class="ubicacion-name">Chacarilla del Estanque</div>
+      <div class="ubicacion-details">
+        <div class="detail-row">
+          <div class="detail-icon">📍</div>
+          <div>
+            <div class="detail-label">Dirección</div>
+            Av. Primavera Nro. 480, Urb. Chacarilla del Estanque<br />
+            Lima – Lima – Santiago de Surco
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">🕐</div>
+          <div>
+            <div class="detail-label">Horario de atención</div>
+            Lunes a Viernes: 8:30 – 19:00<br />
+            Sábados: 9:00 – 14:00
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">📞</div>
+          <div>
+            <div class="detail-label">Teléfono</div>
+            (01) 910234347
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">💬</div>
+          <div>
+            <div class="detail-label">WhatsApp</div>
+            +51 910 234 347
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip" id="contacto">
+  <h2 class="section-title">¿Listo para cambiar<br />al mejor precio?</h2>
+  <p class="section-sub">Contáctanos por WhatsApp o visítanos directamente en Av. Primavera 480, Chacarilla del Estanque.</p>
+  <div class="cta-buttons">
+    <a href="https://wa.me/51910234347" class="btn-primary">
+      <span>💬</span> Escribir por WhatsApp
+    </a>
+    <a href="tel:+51910234347" class="btn-outline">
+      <span>📞</span> Llamar ahora
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <div class="logo-icon">A</div>
+        <span class="logo-text" style="color:#fff">Aurum <span style="color:var(--gold)">Divisas</span></span>
+      </a>
+      <p class="footer-tagline">Tu casa de cambio de confianza en Chacarilla del Estanque. Tasas competitivas, seguridad y atención personalizada en Lima, Perú.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <ul>
+        <li><a href="#">Compra de dólares</a></li>
+        <li><a href="#">Venta de dólares</a></li>
+        <li><a href="#">Cambio empresarial</a></li>
+        <li><a href="#">Cambio digital</a></li>
+        <li><a href="#">Asesoría cambiaria</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Institución</h4>
+      <ul>
+        <li><a href="#">Quiénes somos</a></li>
+        <li><a href="#">Ubicación</a></li>
+        <li><a href="#">Trabaja con nosotros</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Política de privacidad</a></li>
+        <li><a href="#">Términos de uso</a></li>
+        <li><a href="#">Libro de reclamaciones</a></li>
+        <li><a href="#">LAFT / KYC</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Aurum Divisas S.A.C. · Av. Primavera 480, Chacarilla del Estanque, Santiago de Surco, Lima</span>
+    <div class="footer-reg">
+      <span>🔒 Operaciones cifradas SSL</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reloj en tiempo real
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    document.getElementById('update-time').textContent =
+      now.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' }) +
+      ' — ' + now.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Micro-fluctuación de tasas (simulada)
+  function jitterRates() {
+    const base = 3.728;
+    const jitter = (Math.random() - 0.5) * 0.004;
+    const newRate = (base + jitter).toFixed(3);
+    document.getElementById('usd-rate').textContent = newRate;
+  }
+  setInterval(jitterRates, 8000);
+</script>
+</body>
+</html>
